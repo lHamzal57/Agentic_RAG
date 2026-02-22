@@ -22,6 +22,25 @@ def query(q: str):
 
     return {"answer":answer["response"]}
 
+@app.post("/add")
+def add_Knowledge(text: str):
+    """Add New Docs to the embded vector db"""
+    try:
+        import uuid
+        doc_id = str(uuid.uuid4())
+        # Add text to chroma collection
+        collection.add(documents=[text], ids=[doc_id])
+
+        return {
+            "status": "success",
+            "message": "Content Added",
+            "id":doc_id
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": str(e)
+        }
 
 @app.post("/files/validate")
 async def validate_file(file: UploadFile = File(...)):
