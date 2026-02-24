@@ -1,21 +1,16 @@
 from app.loaders.factory import get_loader
-from app.processors.chunker import chunk_text
+from app.processors.normalizer import normalize_blocks
+from app.processors.chunker import split_blocks_into_chunks
+from app.vectorstore.chroma_repository import ChromaRepository
+
 
 class IngestionService:
-
     def __init__(self, collection):
-        self.collection = collection
+        self.repo = ChromaRepository(collection)
 
-    def ingest(self, file_path: str):
-
+    def ingest_file(self, doc_id: str, file_path: str) -> int:
         loader = get_loader(file_path)
-        text = loader.load(file_path)
-
-        chunks = chunk_text(text)
-
-        self.collection.add(
-            documents=chunks,
-            ids=[f"chunk_{i}" for i in range(len(chunks))]
-        )
-
-        return len(chunks)
+        blocks = loader.load(file_path)
+        blocks = normalize_blocks(blocks)
+        chunks = split_blocks_into_chunks(doc_id=doc_id, blocks=blocks)
+        return self.repo.add_chunks(chunks)

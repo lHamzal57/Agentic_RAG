@@ -40,8 +40,10 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
-.db/
-db/
+db/chroma/*
+!db/chroma/.gitkeep
+storage/uploads/*
+!storage/uploads/.gitkeep
 
 # ============================================
 # Installer Logs
