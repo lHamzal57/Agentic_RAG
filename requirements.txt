@@ -14,6 +14,7 @@ pydentic==0.0.1.dev3
 PyMuPDF==1.27.1
 oython-dotenv
 python-docx==1.2.0
+python-dotenv==1.2.1
 python-multipart==0.0.22
 pyxnat==1.6.4
 tiktoken==0.12.0
