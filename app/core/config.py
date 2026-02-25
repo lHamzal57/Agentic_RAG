@@ -19,6 +19,14 @@ class Settings(BaseSettings):
     RAG_CHUNK_SIZE: int = 400
     RAG_CHUNK_OVERLAP: int = 50
 
+    # Workflow-specific retrieval tuning
+    RAG_TOP_K_GENERAL_QUESTION: int = 5
+    RAG_TOP_K_SYSTEM_ARCHITECTURE: int = 8
+    RAG_TOP_K_TEST_CASES: int = 6
+    RAG_TOP_K_TEST_PLAN: int = 10
+    RAG_TOP_K_TEST_REVIEW: int = 7
+
+
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     OLLAMA_GENERATE_PATH: str = "/api/generate"
     OLLAMA_MODEL: str = "tinyllama"

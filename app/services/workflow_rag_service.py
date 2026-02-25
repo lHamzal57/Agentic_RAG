@@ -1,7 +1,6 @@
 from app.services.retrieval_service import RetrievalService
-from app.processors.workflow_prompt_builder import build_workflow_prompt
 from app.schemas.workflows import WorkflowType
-
+from app.workflows.registry import get_workflow_strategy
 
 class WorkflowRagService:
     def __init__(self, collection, ollama_client):
@@ -18,10 +17,17 @@ class WorkflowRagService:
         question: str,
         top_k: int | None = None
     ) -> dict:
+        strategy = get_workflow_strategy(workflow)
+
+        # workflow default top_k if caller didn't provide one
+        effective_top_k = top_k
+        if effective_top_k is None:
+            effective_top_k = strategy.retrieval_config().get("top_k")
+
         chunks = self.retrieval.retrieve(
             doc_id=doc_id,
             question=question,
-            top_k=top_k
+            top_k=effective_top_k
         )
 
         if not chunks:
@@ -32,13 +38,9 @@ class WorkflowRagService:
                 "chunks_used": [],
             }
 
-        prompt = build_workflow_prompt(
-            workflow=workflow,
-            question=question,
-            chunks=chunks
-        )
-
-        answer = self.ollama.generate(prompt=prompt)
+        prompt = strategy.build_prompt(question=question, chunks=chunks)
+        raw_answer = self.ollama.generate(prompt=prompt)
+        answer = strategy.postprocess(raw_answer)
 
         return {
             "doc_id": doc_id,
