@@ -4,7 +4,13 @@ from app.core.config import settings
 
 class OllamaClient:
     def __init__(self):
-        self.generate_url = f"{settings.OLLAMA_BASE_URL.rstrip('/')}/api/generate"
+        base = settings.OLLAMA_BASE_URL.rstrip("/")
+        path = settings.OLLAMA_GENERATE_PATH
+        if not path.startswith("/"):
+            path = "/" + path
+        self.generate_url = f"{base}{path}"
+        print(f"Ollam baseURL: {self.generate_url}")
+        print(f"Ollama Model: {settings.OLLAMA_MODEL}")
 
     def generate(self, prompt: str, model: str | None = None) -> str:
         payload = {

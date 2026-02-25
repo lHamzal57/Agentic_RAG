@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     RAG_CHUNK_OVERLAP: int = 50
 
     OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_GENERATE_PATH: str = "/api/generate"
     OLLAMA_MODEL: str = "tinyllama"
     OLLAMA_TEMPERATURE: float = 0.2
     OLLAMA_NUM_CTX: int = 4096
