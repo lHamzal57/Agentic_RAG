@@ -16,8 +16,13 @@ class Settings(BaseSettings):
     CHROMA_COLLECTION: str = "brd_docs"
 
     RAG_TOP_K: int = 5
-    RAG_CHUNK_SIZE: int = 400
-    RAG_CHUNK_OVERLAP: int = 50
+    RAG_RETRIEVAL_EXPAND_NEIGHBORS: bool = True
+    RAG_RETRIEVAL_NEIGHBOR_RADIUS: int = 1
+    RAG_PROMPT_SORT_CHUNKS_BY_INDEX: bool = True
+
+    RAG_CHUNK_SIZE: int = 1500
+    RAG_CHUNK_OVERLAP: int = 150
+    RAG_SEMANTIC_WINDOW_MAX_CHARS: int = 3000
 
     # Workflow-specific retrieval tuning
     RAG_TOP_K_GENERAL_QUESTION: int = 5

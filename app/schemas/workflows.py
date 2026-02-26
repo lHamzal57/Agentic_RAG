@@ -1,5 +1,5 @@
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Any
 
 
@@ -15,7 +15,7 @@ class WorkflowQueryRequest(BaseModel):
     doc_id: str
     workflow: WorkflowType
     question: str
-    top_k: int | None = None
+    top_k: int | None = Field(default=None, ge=1, le=50)
 
 
 class WorkflowQueryResponse(BaseModel):

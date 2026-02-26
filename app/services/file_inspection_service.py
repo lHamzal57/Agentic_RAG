@@ -35,6 +35,8 @@ class FileInspectionService:
                     "text_preview": text_preview,
                 }
             )
+            
+        chunks.sort(key=lambda c: c.get("metadata", {}).get("chunk_index", 10**9))
 
         total = self.repo.count_doc_chunks(doc_id)
 
