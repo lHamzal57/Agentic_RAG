@@ -109,25 +109,28 @@ class ChromaRepository:
         return len(ids)
 
     def query_by_doc(self, doc_id: str, query_text: str, n_results: int) -> List[Dict[str, Any]]:
+        # Ask Chroma for distances too (if supported by your version)
         results = self.collection.query(
             query_texts=[query_text],
             n_results=n_results,
             where={"doc_id": doc_id},
+            include=["documents", "metadatas", "distances"],
         )
 
         ids = results.get("ids", [[]])[0]
         docs = results.get("documents", [[]])[0]
         metas = results.get("metadatas", [[]])[0] if results.get("metadatas") else []
+        distances = results.get("distances", [[]])[0] if results.get("distances") else []
 
         items = []
         for i in range(len(ids)):
-            items.append(
-                {
-                    "id": ids[i],
-                    "text": docs[i],
-                    "metadata": metas[i] if i < len(metas) else {},
-                }
-            )
+            items.append({
+                "id": ids[i],
+                "text": docs[i],
+                "metadata": metas[i] if i < len(metas) else {},
+                "distance": distances[i] if i < len(distances) else None,
+                "rank": i,  # original vector rank before local rerank
+            })
         return items
 
     def get_doc_chunks(self, doc_id: str, limit: int | None = None, include_docs: bool = False) -> Dict[str, Any]:

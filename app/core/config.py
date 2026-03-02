@@ -20,6 +20,12 @@ class Settings(BaseSettings):
     RAG_RETRIEVAL_NEIGHBOR_RADIUS: int = 1
     RAG_PROMPT_SORT_CHUNKS_BY_INDEX: bool = True
 
+    # Retrieval / reranking
+    RAG_RERANK_ENABLED: bool = True
+    RAG_RETRIEVAL_CANDIDATE_MULTIPLIER: int = 3
+    RAG_RETRIEVAL_CANDIDATE_MAX: int = 30
+    RAG_RERANK_MIN_CHUNK_CHARS: int = 80
+
     RAG_CHUNK_SIZE: int = 1500
     RAG_CHUNK_OVERLAP: int = 150
     RAG_SEMANTIC_WINDOW_MAX_CHARS: int = 3000
@@ -53,6 +59,12 @@ class Settings(BaseSettings):
             raise ValueError("RAG_CHUNK_OVERLAP must be >= 0")
         return v
 
+    @field_validator("RAG_RETRIEVAL_CANDIDATE_MULTIPLIER", "RAG_RETRIEVAL_CANDIDATE_MAX", "RAG_RERANK_MIN_CHUNK_CHARS")
+    @classmethod
+    def validate_positive_ints(cls, v: int):
+        if v < 1:
+            raise ValueError("retrieval/rerank config values must be >= 1")
+        return v
     class Config:
         env_file = ".env"
         extra = "ignore"

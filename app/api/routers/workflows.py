@@ -45,7 +45,7 @@ async def query_by_workflow_json(
 async def query_by_workflow_form(
     doc_id: str = Form(..., description="Document ID"),
     workflow: WorkflowType = Form(..., description="Workflow type"),
-    question: str = Form(..., description="Question / task request"),
+    question: str | None = Form(None, description="Question / task request"),
     top_k: int | None = Form(None, description="Optional retrieval top-k override"),
     collection=Depends(get_chroma_collection),
     ollama_client=Depends(get_ollama_client),

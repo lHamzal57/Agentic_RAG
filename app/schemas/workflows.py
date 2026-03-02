@@ -1,6 +1,6 @@
 from enum import Enum
 from pydantic import BaseModel, Field
-from typing import Any
+from typing import Any, Optional
 
 
 class WorkflowType(str, Enum):
@@ -14,7 +14,7 @@ class WorkflowType(str, Enum):
 class WorkflowQueryRequest(BaseModel):
     doc_id: str
     workflow: WorkflowType
-    question: str
+    question: Optional[str] = Field(default=None, min_length=1)  # <-- optional
     top_k: int | None = Field(default=None, ge=1, le=50)
 
 
