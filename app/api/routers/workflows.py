@@ -23,6 +23,8 @@ def _run_workflow_query(
         workflow=payload.workflow,
         question=payload.question,
         top_k=payload.top_k,
+        inputs=payload.inputs,
+        use_cases=payload.use_cases,
     )
     return WorkflowQueryResponse(**result)
 
@@ -47,6 +49,8 @@ async def query_by_workflow_form(
     workflow: WorkflowType = Form(..., description="Workflow type"),
     question: str | None = Form(None, description="Question / task request"),
     top_k: int | None = Form(None, description="Optional retrieval top-k override"),
+    inputs: str | None = Form(None),
+    use_cases: str | None = Form(None),
     collection=Depends(get_chroma_collection),
     ollama_client=Depends(get_ollama_client),
 ):
@@ -56,6 +60,8 @@ async def query_by_workflow_form(
             workflow=workflow,
             question=question,
             top_k=top_k,
+            inputs=inputs,
+            use_cases=use_cases,
         )
         return _run_workflow_query(payload, collection, ollama_client)
     except Exception as e:

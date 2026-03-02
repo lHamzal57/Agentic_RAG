@@ -14,8 +14,14 @@ class WorkflowType(str, Enum):
 class WorkflowQueryRequest(BaseModel):
     doc_id: str
     workflow: WorkflowType
-    question: Optional[str] = Field(default=None, min_length=1)  # <-- optional
+    question: Optional[str] = Field(default=None)  # optional
     top_k: int | None = Field(default=None, ge=1, le=50)
+
+    # NEW: optional user-provided artifact input (e.g. existing test cases)
+    inputs: Optional[str] = Field(default=None)
+
+    # NEW: optional explicit use-cases (if user already generated them)
+    use_cases: Optional[str] = Field(default=None)
 
 
 class WorkflowQueryResponse(BaseModel):

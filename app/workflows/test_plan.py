@@ -16,20 +16,18 @@ class TestPlanWorkflow(BaseWorkflow):
             "critical flows, validations, and acceptance criteria in the document."
         )
 
-    def build_retrieval_query(self, user_question: Optional[str]) -> str:
-        # Query rewrite to improve semantic recall in vector search
-        base = user_question or self.default_question()
+    def build_retrieval_query(self, user_question: Optional[str], extra: Optional[dict] = None) -> str:
+        base = (user_question or self.default_question()).strip()
         hints = (
-            "business use case, user flow, requirement, acceptance criteria, business rule, "
-            "validation, constraint, scope, dependency, integration, risk, assumption, "
-            "edge case, negative case, test strategy, test environment"
+            "business use case, user flow, requirement, acceptance criteria, business rule, validation, "
+            "scope, dependency, integration, risk, assumption, test strategy, environment"
         )
         return f"{base}\n\nFocus terms: {hints}"
 
-    def build_prompt_question(self, user_question: Optional[str]) -> str:
-        # What the model should actually answer
-        return user_question or self.default_question()
+    def build_prompt_question(self, user_question: Optional[str], extra: Optional[dict] = None) -> str:
+        return (user_question or self.default_question()).strip()
 
-    def build_prompt(self, question: str, chunks: list[dict]) -> str:
+    def build_prompt(self, question: str, chunks: list[dict], inputs: Optional[str] = None, extra: Optional[dict] = None) -> str:
         context = self.format_context(chunks)
-        return test_plan.render_prompt(context=context, question=question)
+        use_cases = (extra or {}).get("use_cases")
+        return test_plan.render_prompt(context=context, question=question, use_cases=use_cases)

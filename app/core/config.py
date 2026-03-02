@@ -30,6 +30,10 @@ class Settings(BaseSettings):
     RAG_CHUNK_OVERLAP: int = 150
     RAG_SEMANTIC_WINDOW_MAX_CHARS: int = 3000
 
+    RAG_TESTCASES_AUTOGEN_USECASES: bool = True
+    RAG_USECASES_TOP_K: int = 8
+    RAG_USECASES_CACHE_ENABLED: bool = True
+    
     # Workflow-specific retrieval tuning
     RAG_TOP_K_GENERAL_QUESTION: int = 5
     RAG_TOP_K_SYSTEM_ARCHITECTURE: int = 8

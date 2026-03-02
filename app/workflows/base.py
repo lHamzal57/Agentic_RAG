@@ -9,21 +9,12 @@ class BaseWorkflow(ABC):
         return {}
 
     def default_question(self) -> str:
-        """
-        Used when the API request doesn't provide a question.
-        """
         return "Summarize the document."
 
-    def build_retrieval_query(self, user_question: Optional[str]) -> str:
-        """
-        Text used for vector search. Can be different from prompt question.
-        """
+    def build_retrieval_query(self, user_question: Optional[str], extra: Optional[dict] = None) -> str:
         return user_question or self.default_question()
 
-    def build_prompt_question(self, user_question: Optional[str]) -> str:
-        """
-        The question/instruction presented to the LLM in the prompt.
-        """
+    def build_prompt_question(self, user_question: Optional[str], extra: Optional[dict] = None) -> str:
         return user_question or self.default_question()
 
     @staticmethod
@@ -33,7 +24,13 @@ class BaseWorkflow(ABC):
         return "\n\n".join(f"[Chunk ID: {c['id']}]\n{c['text']}" for c in chunks)
 
     @abstractmethod
-    def build_prompt(self, question: str, chunks: list[dict]) -> str:
+    def build_prompt(
+        self,
+        question: str,
+        chunks: list[dict],
+        inputs: Optional[str] = None,
+        extra: Optional[dict] = None,
+    ) -> str:
         raise NotImplementedError
 
     def postprocess(self, llm_answer: str) -> str:
