@@ -5,7 +5,7 @@ from app.services.retrieval_service import RetrievalService
 from app.schemas.workflows import WorkflowType
 from app.workflows.registry import get_workflow_strategy
 from app.core.config import settings
-from prompts import use_cases as use_cases_prompt
+from prompts import user_stories as use_cases_prompt
 
 
 logger = logging.getLogger(__name__)
