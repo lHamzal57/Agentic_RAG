@@ -10,9 +10,9 @@ pandas==3.0.1
 pdfplumber==0.11.9
 pip==24.0
 pydantic-settings==2.13.1
-pydentic==0.0.1.dev3
+pydantic==0.0.1.dev3
 PyMuPDF==1.27.1
-oython-dotenv
+python-dotenv
 python-docx==1.2.0
 python-dotenv==1.2.1
 python-multipart==0.0.22
